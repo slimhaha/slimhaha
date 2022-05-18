@@ -1,0 +1,61 @@
+#include<iostream>
+#include<string.h>
+#include<stdlib.h>
+
+void _mergesort(int *arr,int *temparr,int start, int end)
+{
+	if(start >= end)
+	{
+		return;
+	}
+	
+	int mid = start+(end-start)/2;
+	int start1 = start,end1 = mid;       //左数组头尾 
+	int start2 = mid+1,end2 = end;       //右数组头尾 
+	
+	_mergesort(arr,temparr,start1,end1); //左数组 
+	_mergesort(arr,temparr,start2,end2); //右数组 
+	
+	int i = start;
+	
+	while(start1<=end1 && start2<=end2)                //理解为左右两个数组作比较，将小的数放到临时数组里面 
+	{
+		temparr[i++] = arr[start1]<arr[start2]?arr[start1++]:arr[start2++];
+	}
+	
+	while(start1 <= end1)
+	{
+		temparr[i++] = arr[start1++];
+	}
+	
+	while(start2 <=end2)
+	{
+		temparr[i++] = arr[start2++];
+	}
+	
+	memcpy(arr+start,temparr+start,(end-start+1)*sizeof(int));    //拷贝函数，第一个参数为目的地址，第二个参数为源地址，第三个参数为宽度。 
+}
+
+
+
+void mergesort(int *arr,unsigned int n)
+{
+	if(n<2){
+		return;
+	}
+	int temparr[n];
+	
+	_mergesort(arr,temparr,0,n-1);
+}
+
+int main()
+{
+	int arr[7] = {7,6,5,4,3,2,1};
+	
+	mergesort(arr,7);
+	for(int i=0;i<7;i++)
+	{
+		printf("%d ",arr[i]);
+	}
+	return 0;
+}
