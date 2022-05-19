@@ -1,0 +1,83 @@
+#include <iostream>
+using namespace std;
+
+void swap(int *a, int *b)
+{
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+void heapify(int *arr,int start,int end)  //元素下沉，start待heapify元素的下表，end排序后最后一个元素的下标。 
+{
+	int dad = start;
+	int son = dad*2+1;
+	
+	while(son<end)
+	{
+		if(son+1<=end && arr[son]<arr[son+1])
+		{
+			son++;
+		}
+		if(arr[dad]>=arr[son])
+		{
+			return;
+		}
+		
+		swap(&arr[dad],&arr[son]);
+		dad = son;
+		son = dad*2+1;
+	}
+	
+}
+
+void heapify1(int *arr,int start,int end) //递归方法
+{
+	int dad = start;                     //父节点与左子节点 
+	int son = dad*2+1;
+	
+	if(son > end)                         //判断子节点是否存在 
+	{
+		return;
+	}
+	
+	if(son+1<=end && arr[son]<arr[son+1])           //判断右子节点是否存在以及左右子节点的大小，选择大的 
+	{
+		son++;
+	}
+	if(arr[dad]>=arr[son])                           
+	{
+		return;
+	}
+	
+	swap(&arr[dad],&arr[son]);                     //更换父节点和较大子节点的位置 
+	heapify1(arr,son,end);                            //继续循环 
+ } 
+
+void heapsort(int *arr,int len)
+{
+	int i;
+	for(i=((len-1)/2);i>=0;i--)             //确定最后一个非叶子节点然后构造大顶堆 
+	{
+		heapify(arr,i,len-1);
+	}
+	for(i=len-1;i>0;i--)                     //将跟节点与最后未排序的节点换位置  
+	{
+		swap(&arr[0],&arr[i]);
+		heapify(arr,0,i-1);                        
+	}
+	
+}
+
+int main()
+{
+	int arr[7] = {7,6,5,4,3,2,1};
+	
+	heapsort(arr,7);
+	for(int i=0;i<7;i++)
+	{
+		cout<<arr[i]<<" ";
+	}
+		
+	return 0;
+}
